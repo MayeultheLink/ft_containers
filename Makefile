@@ -1,9 +1,9 @@
 NAME	=	ft_containers
 
-SRCS	=	srcs/main/minishell.c \
+SRCS	=	main.cpp
 
 CC		=	c++
-CFLAGS	=	-Wall -Wextra -Werror -std=c++98
+CFLAGS	=	-Wall -Wextra -Werror
 OBJS	=	${SRCS:.c=.o}
 		
 all		:	${NAME}
