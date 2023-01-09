@@ -3,7 +3,7 @@
 
 namespace ft {
 
-	template<class T>
+	template< class T >
 	struct is_integral {
 		static const bool value = false;
 	};
@@ -35,36 +35,6 @@ namespace ft {
 
 	template<>
 	struct is_integral<volatile char> {
-		static const bool value = true;
-	};
-
-	template<>
-	struct is_integral<char16_t> {
-		static const bool value = true;
-	};
-
-	template<>
-	struct is_integral<const char16_t> {
-		static const bool value = true;
-	};
-
-	template<>
-	struct is_integral<volatile char16_t> {
-		static const bool value = true;
-	};
-
-	template<>
-	struct is_integral<char32_t> {
-		static const bool value = true;
-	};
-
-	template<>
-	struct is_integral<const char32_t> {
-		static const bool value = true;
-	};
-
-	template<>
-	struct is_integral<volatile char32_t> {
 		static const bool value = true;
 	};
 
