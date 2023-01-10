@@ -4,12 +4,12 @@ SRCS	=	main.cpp
 
 CC		=	c++
 CFLAGS	=	-Wall -Wextra -Werror
-OBJS	=	${SRCS:.c=.o}
+OBJS	=	${SRCS:.cpp=.o}
 		
 all		:	${NAME}
 
 $(NAME)	:	 $(OBJS)
-		${CC} ${CFLAGS} -o ${NAME} ${OBJS} ${LIBFT}
+		${CC} ${CFLAGS} -o ${NAME} ${OBJS}
 
 clean	:
 		rm -f ${OBJS}

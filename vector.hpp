@@ -1,6 +1,8 @@
 #ifndef VECTOR_HPP
 #define VECTOR_HPP
 
+#include <iterator>
+#include <iostream>
 #include <memory>
 #include <stdexcept>
 
@@ -61,18 +63,18 @@ namespace ft {
 			}
 
 			vector( const vector & x ) {
-				this = x;
+				*this = x;
 			}
 
 			vector & operator=( const vector & x ) {
 				this->_allocator = x.get_allocator();
 				this->_size = x.size();
 				this->_capacity = x.capacity();
-				if (x.size > 0)
+				if (x.size() > 0)
 				{
-					this->_array = this->_alloc.allocate(this->_capacity);
+					this->_array = this->_allocator.allocate(this->_capacity);
 					for (size_t i = 0; i < x.size(); i++)
-						this->_alloc.construct(this->_array + i, x[i]);
+						this->_allocator.construct(this->_array + i, x[i]);
 				}
 				return *this;
 			}
@@ -105,7 +107,7 @@ namespace ft {
 			}
 
 			const_iterator end( void ) const {
-				return iterator(this->_array + this->_size);
+				return const_iterator(this->_array + this->_size);
 			}
 
 			reverse_iterator rbegin( void ) {
@@ -146,13 +148,19 @@ namespace ft {
 				else if (n < this->_size) {
 					for (size_t i = n; i < this->_size; i++)
 						this->_allocator.destroy(this->_array + i);
-					this->_allocator.deallocate(this->_array + n, this->_capacity - n);
 					this->_size = n;
-					this->_capacity = n;
 				}
-				else if (n > this->size) {
+				else if (n > this->_size) {
 					if (n > this->_capacity)
-						this->_array + n = this->_allocator.allocate(n - this->_capacity);
+					{
+						pointer tmp = this->_allocator.allocate(n);
+						int i = 0;
+						for (iterator it = this->begin(); it != this->end(); it++)
+							this->_allocator.construct(tmp + i++, *it);
+						this->_allocator.deallocate(this->_array, this->_capacity);
+						this->_array = tmp;
+						this->_capacity = n;
+					}
 					for (size_t i = this->_size; i < n; i++)
 						this->_allocator.construct(this->_array + i, val);
 					this->_size = n;
@@ -249,7 +257,7 @@ namespace ft {
 	/*-----------------------------------------------------------------------------------------*/
 
 			template< class InputIterator >
-			void assign( InputIterator first, InputIterator last ) {
+			void assign( InputIterator first, InputIterator last, typename ft::enable_if<!ft::is_integral<InputIterator>::value, void **>::type = 0 ) {
 				this->clear();
 				this->insert(this->begin(), first, last);
 			}
@@ -257,7 +265,8 @@ namespace ft {
 			void assign( size_type n, const value_type & val ) {
 				this->clear();
 				if (this->_capacity < n) {
-					this->_allocator.allocate(this->_array + this->_capacity, n - this->_capacity);
+					this->_allocator.deallocate(this->_array, this->_capacity);
+					this->_array = this->_allocator.allocate(n);
 					this->_capacity = n;
 				}
 				for (size_t i = 0; i < n; i++)
@@ -284,40 +293,61 @@ namespace ft {
 			iterator insert( iterator position, const value_type & val ) {
 				if (this->_capacity == this->_size)
 					this->reserve(this->_size * 2);
-				for (iterator it = this->end(); it != position; it--)
-					this->_allocator.construct(it, *(it - 1));
-				this->_allocator.destroy(position);
-				this->_allocator.construct(position, val);
+
+				difference_type diff = position - this->begin();
+				pointer index = this->_array + this->_size;
+				pointer end = this->_array + diff;
+
+				for (; index != end; index--)
+				{
+					this->_allocator.construct(index, *(index - 1));
+					this->_allocator.destroy(index - 1);
+				}
+				this->_allocator.construct(index, val);
 				this->_size++;
 				return position;
 			}
 
 			void insert( iterator position, size_type n, const value_type & val ) {
+				if (!n)
+					return;
+
 				if (this->_capacity < this->_size + n)
 					this->reserve(this->_size + n);
-				for (iterator it = this->end() + n - 1; it != position + n; it--)
-					this->_allocator.construct(it, *(it - n));
+				
+				difference_type diff = position - this->begin();
+				pointer index = this->_array + this->_size + n - 1;
+				pointer end = this->_array + diff + n;
+
+				for (; index != end; index--)
+				{
+					this->_allocator.construct(index, *(index - n));
+					this->_allocator.destroy(index - n);
+				}
 				for (size_t i = 0; i < n; i++)
-					this->_allocator.destroy(position + i);
-				for (size_t i = 0; i < n; i++)
-					this->_allocator.construct(position + i, val);
+					this->_allocator.construct(index - i, val);
 				this->_size += n;
-				return position;
 			}
 
 			template< class InputIterator >
-			void insert( iterator position, InputIterator first, InputIterator last ) {
-				size_type n = std::distance(first, last);
+			void insert( iterator position, InputIterator first, InputIterator last, typename ft::enable_if<!ft::is_integral<InputIterator>::value, void **>::type = 0 ) {
+				difference_type n = last - first;
+
 				if (this->_capacity < this->_size + n)
 					this->reserve(this->_size + n);
-				for (iterator it = this->end() + n - 1; it != position + n; it--)
-					this->_allocator.construct(it, *(it - n));
-				for (size_t i = 0; i < n; i++)
-					this->_allocator.destroy(position + i);
-				for (size_t i = 0; i < n; i++)
-					this->_allocator.construct(position + i, *first++);
+
+				difference_type diff = position - this->begin();
+				pointer index = this->_array + this->_size + n;
+				pointer end = this->_array + diff + n;
+
+				for (; index != end; index--)
+				{
+					this->_allocator.construct(index, *(index - n));
+					this->_allocator.destroy(index - n);
+				}
+				for (size_t i = 0; i <= n; i++)
+					this->_allocator.construct(index - i, *last--);
 				this->_size += n;
-				return position;
 			}
 
 			iterator erase( iterator position ) {

@@ -4,7 +4,7 @@
 namespace ft {
 
 	template< typename T >
-	class random_access_iterator { //: public iterator< ft::random_access_iterator_tag, T > {
+	class random_access_iterator {
 	
 		public :
 
@@ -26,12 +26,13 @@ namespace ft {
 			random_access_iterator( void ) : it(NULL) {}
 			random_access_iterator( pointer it ) : it(it) {}
 			random_access_iterator( const random_access_iterator<T> & src ) : it(src.base()) {}
-			virtual ~random_access_iterator() {}
-/*
-			operator random_access_iterator<T const>() const {
-				return random_access_iterator<T const>(this->it);
+			~random_access_iterator( void ) {}
+
+			random_access_iterator & operator=( random_access_iterator<T> const & cpy ) {
+				this->it = cpy.base();
+				return *this;
 			}
-*/
+
 			pointer base() const {
 				return this->it;
 			}
@@ -41,14 +42,21 @@ namespace ft {
 			}
 
 			random_access_iterator operator+( difference_type n ) const {
-				T tmp = this->it;
-				tmp += n;
-				random_access_iterator ret(tmp);
-				return ret;
+				random_access_iterator tmp = *this;
+				tmp->it += n;
+				return tmp;
+			}
+
+			difference_type operator+( random_access_iterator const & rhs ) const {
+				return (this->it + rhs.base());
+			}
+
+			difference_type operator-( random_access_iterator const & rhs ) const {
+				return (this->it - rhs.base());
 			}
 
 			random_access_iterator & operator++( void ) {
-				++this->it;
+				this->it++;
 				return *this;
 			}
 
@@ -64,10 +72,9 @@ namespace ft {
 			}
 
 			random_access_iterator operator-( difference_type n ) const {
-				T tmp = this->it;
-				tmp -= n;
-				random_access_iterator ret(tmp);
-				return ret;
+				random_access_iterator tmp = *this;
+				tmp->it -= n;
+				return tmp;
 			}
 
 			random_access_iterator & operator--( void ) {
