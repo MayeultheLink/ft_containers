@@ -560,6 +560,17 @@ int main() {
 		std::cout << *it << " ";
 	std::cout << std::endl;
 
+	std_v.insert(std_v.begin() - 1, std_tmp.end(), std_tmp.begin());
+	ft_v.insert(ft_v.begin() - 1, ft_tmp.end(), ft_tmp.begin());
+	std::cout << "std : " << std_v.size() << " " << std_v.max_size() << " " << std_v.capacity() << std::endl;
+	std::cout << "ft  : " << ft_v.size() << " " << ft_v.max_size() << " " << ft_v.capacity() << std::endl;
+	for (ft::vector<int>::iterator it = ft_v.begin(); it != ft_v.end(); it++)
+		std::cout << *it << " ";
+	std::cout << std::endl;
+	for (std::vector<int>::iterator it = std_v.begin(); it != std_v.end(); it++)
+		std::cout << *it << " ";
+	std::cout << std::endl;
+
 	ft_tmp = ft_v;
 	if (ft_tmp == ft_v)
 		std::cout << "ok" << std::endl;
@@ -589,8 +600,12 @@ int main() {
 		std::cout << "error" << std::endl;
 
 
+
+
 	std::cout << std::endl;
 	}
+
+	
 
 
 	return 0;
