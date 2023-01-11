@@ -42,9 +42,7 @@ namespace ft {
 			}
 
 			random_access_iterator operator+( difference_type n ) const {
-				random_access_iterator tmp = *this;
-				tmp->it += n;
-				return tmp;
+				return (this->it + n);
 			}
 
 			difference_type operator+( random_access_iterator const & rhs ) const {
@@ -72,9 +70,7 @@ namespace ft {
 			}
 
 			random_access_iterator operator-( difference_type n ) const {
-				random_access_iterator tmp = *this;
-				tmp->it -= n;
-				return tmp;
+				return (this->it - n);
 			}
 
 			random_access_iterator & operator--( void ) {

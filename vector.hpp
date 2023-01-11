@@ -317,7 +317,7 @@ namespace ft {
 				
 				difference_type diff = position - this->begin();
 				pointer index = this->_array + this->_size + n - 1;
-				pointer end = this->_array + diff + n;
+				pointer end = this->_array + diff + n - 1;
 
 				for (; index != end; index--)
 				{
@@ -337,40 +337,42 @@ namespace ft {
 					this->reserve(this->_size + n);
 
 				difference_type diff = position - this->begin();
-				pointer index = this->_array + this->_size + n;
-				pointer end = this->_array + diff + n;
+				pointer index = this->_array + this->_size + n - 1;
+				pointer end = this->_array + diff + n - 1;
 
 				for (; index != end; index--)
 				{
 					this->_allocator.construct(index, *(index - n));
 					this->_allocator.destroy(index - n);
 				}
-				for (size_t i = 0; i <= n; i++)
-					this->_allocator.construct(index - i, *last--);
+				for (size_t i = 0; i < n; i++)
+					this->_allocator.construct(index - i, *(--last));
 				this->_size += n;
 			}
 
 			iterator erase( iterator position ) {
-				iterator tmp = this->begin();
-				while (tmp != position)
+				pointer tmp = this->_array;
+				iterator it = this->begin();
+				while (it != position) {
+					it++;
 					tmp++;
-				while (tmp != this->end()) {
-					this->_allocator.destroy(tmp);
+				}
+				while (++it != this->end()) {
 					*tmp = *(tmp + 1);
 					tmp++;
 				}
+				this->_allocator.destroy(tmp);
 				this->_size--;
 				return position;
 			}
 
 			iterator erase( iterator first, iterator last ) {
 				iterator tmp = first;
-				while (tmp != last) {
-					this->erase(tmp);
-					tmp++;
+				while (first != last) {
+					this->erase(first);
+					last--;
 				}
-				this->_size -= std::distance(first, last);
-				return first;
+				return tmp;
 			}
 
 			void swap( vector & x ) {

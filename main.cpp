@@ -462,6 +462,132 @@ int main() {
 		std::cout << *it << " ";
 	std::cout << std::endl;
 
+	std_v.insert(std_v.begin(), 42);
+	ft_v.insert(ft_v.begin(), 42);
+	std::cout << "std : " << std_v.size() << " " << std_v.max_size() << " " << std_v.capacity() << std::endl;
+	std::cout << "ft  : " << ft_v.size() << " " << ft_v.max_size() << " " << ft_v.capacity() << std::endl;
+	for (ft::vector<int>::iterator it = ft_v.begin(); it != ft_v.end(); it++)
+		std::cout << *it << " ";
+	std::cout << std::endl;
+	for (std::vector<int>::iterator it = std_v.begin(); it != std_v.end(); it++)
+		std::cout << *it << " ";
+	std::cout << std::endl;
+
+	std_v.insert(std_v.begin(), 4, 2);
+	ft_v.insert(ft_v.begin(), 4, 2);
+	std::cout << "std : " << std_v.size() << " " << std_v.max_size() << " " << std_v.capacity() << std::endl;
+	std::cout << "ft  : " << ft_v.size() << " " << ft_v.max_size() << " " << ft_v.capacity() << std::endl;
+	for (ft::vector<int>::iterator it = ft_v.begin(); it != ft_v.end(); it++)
+		std::cout << *it << " ";
+	std::cout << std::endl;
+	for (std::vector<int>::iterator it = std_v.begin(); it != std_v.end(); it++)
+		std::cout << *it << " ";
+	std::cout << std::endl;
+
+	std::vector<int> std_tmp;
+	ft::vector<int> ft_tmp;
+	for (int i = 0; i < 5; i++)
+	{
+		std_tmp.push_back(i);
+		ft_tmp.push_back(i);
+	}
+	std_v.insert(std_v.begin(), std_tmp.begin(), std_tmp.end());
+	ft_v.insert(ft_v.begin(), ft_tmp.begin(), ft_tmp.end());
+	std::cout << "std : " << std_v.size() << " " << std_v.max_size() << " " << std_v.capacity() << std::endl;
+	std::cout << "ft  : " << ft_v.size() << " " << ft_v.max_size() << " " << ft_v.capacity() << std::endl;
+	for (ft::vector<int>::iterator it = ft_v.begin(); it != ft_v.end(); it++)
+		std::cout << *it << " ";
+	std::cout << std::endl;
+	for (std::vector<int>::iterator it = std_v.begin(); it != std_v.end(); it++)
+		std::cout << *it << " ";
+	std::cout << std::endl;
+
+	std_v.erase(std_v.begin());
+	ft_v.erase(ft_v.begin());
+	std::cout << "std : " << std_v.size() << " " << std_v.max_size() << " " << std_v.capacity() << std::endl;
+	std::cout << "ft  : " << ft_v.size() << " " << ft_v.max_size() << " " << ft_v.capacity() << std::endl;
+	for (ft::vector<int>::iterator it = ft_v.begin(); it != ft_v.end(); it++)
+		std::cout << *it << " ";
+	std::cout << std::endl;
+	for (std::vector<int>::iterator it = std_v.begin(); it != std_v.end(); it++)
+		std::cout << *it << " ";
+	std::cout << std::endl;
+
+	std_v.erase(std_v.begin(), (std_v.begin() + 2));
+	ft_v.erase(ft_v.begin(), (ft_v.begin() + 2));
+	std::cout << "std : " << std_v.size() << " " << std_v.max_size() << " " << std_v.capacity() << std::endl;
+	std::cout << "ft  : " << ft_v.size() << " " << ft_v.max_size() << " " << ft_v.capacity() << std::endl;
+	for (ft::vector<int>::iterator it = ft_v.begin(); it != ft_v.end(); it++)
+		std::cout << *it << " ";
+	std::cout << std::endl;
+	for (std::vector<int>::iterator it = std_v.begin(); it != std_v.end(); it++)
+		std::cout << *it << " ";
+	std::cout << std::endl;
+
+	std_v.swap(std_tmp);
+	ft_v.swap(ft_tmp);
+	std::cout << "std : " << std_v.size() << " " << std_v.max_size() << " " << std_v.capacity() << std::endl;
+	std::cout << "ft  : " << ft_v.size() << " " << ft_v.max_size() << " " << ft_v.capacity() << std::endl;
+	for (ft::vector<int>::iterator it = ft_v.begin(); it != ft_v.end(); it++)
+		std::cout << *it << " ";
+	std::cout << std::endl;
+	for (std::vector<int>::iterator it = std_v.begin(); it != std_v.end(); it++)
+		std::cout << *it << " ";
+	std::cout << std::endl;
+
+	std_v.clear();
+	ft_v.clear();
+	std::cout << "std : " << std_v.size() << " " << std_v.max_size() << " " << std_v.capacity() << std::endl;
+	std::cout << "ft  : " << ft_v.size() << " " << ft_v.max_size() << " " << ft_v.capacity() << std::endl;
+	for (ft::vector<int>::iterator it = ft_v.begin(); it != ft_v.end(); it++)
+		std::cout << *it << " ";
+	std::cout << std::endl;
+	for (std::vector<int>::iterator it = std_v.begin(); it != std_v.end(); it++)
+		std::cout << *it << " ";
+	std::cout << std::endl;
+
+	std::cout << "std : " << typeid(std_v.get_allocator()).name() << std::endl;
+	std::cout << "ft : " << typeid(ft_v.get_allocator()).name() << std::endl;
+
+	std::swap(std_tmp, std_v);
+	ft::swap(ft_tmp, ft_v);
+	std::cout << "std : " << std_v.size() << " " << std_v.max_size() << " " << std_v.capacity() << std::endl;
+	std::cout << "ft  : " << ft_v.size() << " " << ft_v.max_size() << " " << ft_v.capacity() << std::endl;
+	for (ft::vector<int>::iterator it = ft_v.begin(); it != ft_v.end(); it++)
+		std::cout << *it << " ";
+	std::cout << std::endl;
+	for (std::vector<int>::iterator it = std_v.begin(); it != std_v.end(); it++)
+		std::cout << *it << " ";
+	std::cout << std::endl;
+
+	ft_tmp = ft_v;
+	if (ft_tmp == ft_v)
+		std::cout << "ok" << std::endl;
+	else
+		std::cout << "error" << std::endl;
+	ft_v.push_back(42);
+	if (ft_tmp != ft_v)
+		std::cout << "ok" << std::endl;
+	else
+		std::cout << "error" << std::endl;
+	if (ft_tmp < ft_v)
+		std::cout << "ok" << std::endl;
+	else
+		std::cout << "error" << std::endl;
+	if (ft_tmp <= ft_v)
+		std::cout << "ok" << std::endl;
+	else
+		std::cout << "error" << std::endl;
+	ft_tmp.push_back(43);
+	if (ft_tmp > ft_v)
+		std::cout << "ok" << std::endl;
+	else
+		std::cout << "error" << std::endl;
+	if (ft_tmp >= ft_v)
+		std::cout << "ok" << std::endl;
+	else
+		std::cout << "error" << std::endl;
+
 
 	std::cout << std::endl;
 	}
