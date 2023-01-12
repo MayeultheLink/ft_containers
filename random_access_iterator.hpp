@@ -134,8 +134,14 @@ namespace ft {
 			return rhs + n;
 		}
 
+		template <class T, class U>
+		typename ft::random_access_iterator<T>::difference_type operator+( ft::random_access_iterator<T> const & lhs, ft::random_access_iterator<T> const &rhs)
+		{
+			return rhs.base() + lhs.base();
+		}
+
 		template <typename T, typename U>
-		ptrdiff_t operator-(const random_access_iterator<T> &lhs, const random_access_iterator<U> &rhs)
+		typename ft::random_access_iterator<T>::difference_type operator-(const random_access_iterator<T> &lhs, const random_access_iterator<U> &rhs)
 		{
 			return (lhs.base() - rhs.base());
 		}

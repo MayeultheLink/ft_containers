@@ -1,6 +1,8 @@
 #ifndef REVERSE_ITERATOR_HPP
 #define REVERSE_ITERATOR_HPP
 
+#include <iostream>
+
 namespace ft {
 
 	template< typename Iter >
@@ -142,8 +144,8 @@ namespace ft {
 		return (rhs + n);
 	}
 
-	template <class Iter>
-	reverse_iterator<Iter> operator+( const reverse_iterator<Iter> & lhs, const reverse_iterator<Iter> & rhs) {
+	template <class Iter1, class Iter2>
+	typename ft::reverse_iterator<Iter1>::difference_type operator+( const reverse_iterator<Iter1> & lhs, const reverse_iterator<Iter2> & rhs) {
 		return (rhs.base() + lhs.base());
 	}
 
@@ -152,9 +154,9 @@ namespace ft {
 		return (rhs - n);
 	}
 
-	template <class Iter>
-	reverse_iterator<Iter> operator-( const reverse_iterator<Iter> & lhs, const reverse_iterator<Iter> & rhs) {
-		return (lhs.base() - rhs.base());
+	template <class Iter1, class Iter2>
+	typename ft::reverse_iterator<Iter1>::difference_type operator-( const reverse_iterator<Iter1> & lhs, const reverse_iterator<Iter2> & rhs) {
+		return (rhs.base() - lhs.base());
 	}
 
 }

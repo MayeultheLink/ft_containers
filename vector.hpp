@@ -64,11 +64,18 @@ namespace ft {
 			}
 
 			template< class InputIterator >
-			vector( InputIterator first, InputIterator last, const allocator_type & alloc = allocator_type(), typename ft::enable_if<!ft::is_integral<InputIterator>::value, void **>::type = 0 ) : _allocator(alloc), _size(static_cast<size_type>(last - first)), _capacity(static_cast<size_type>(last - first)), _array(0) {
+			vector( InputIterator first, InputIterator last, const allocator_type & alloc = allocator_type(), typename ft::enable_if<!ft::is_integral<InputIterator>::value, void **>::type = 0 ) : _allocator(alloc), _array(0) {
+
+				size_type size = 0;
+				for (InputIterator it = first; it != last; it++)
+					size++;
+				this->_size = size;
+				this->_capacity = size;
+
 				this->_array = this->_allocator.allocate(this->_size);
 				
 				InputIterator tmp = first;
-				for (size_t i = 0; i < this->_size; i++) {
+				for (size_type i = 0; i < this->_size; i++) {
 					this->_allocator.construct(this->_array + i, *tmp);
 					tmp++;
 				}
@@ -274,15 +281,19 @@ namespace ft {
 
 			template< class InputIterator >
 			void assign( InputIterator first, InputIterator last, typename ft::enable_if<!ft::is_integral<InputIterator>::value, void **>::type = 0 ) {
-				if (first >= last)
-					return;
-
 				this->clear();
-				difference_type n = last - first;
+
+				difference_type n = 0;
+				InputIterator tmp = first;
+				while (tmp != last) {
+					n++;
+					tmp++;
+				}
+
 				this->reserve(n);
 
 				pointer p = this->_array;
-				for (iterator it = first; it != last; it++)
+				for (InputIterator it = first; it != last; it++)
 					this->_allocator.construct(p++, *(it));
 				this->_size = n;
 			}
@@ -367,15 +378,19 @@ namespace ft {
 
 			template< class InputIterator >
 			void insert( iterator position, InputIterator first, InputIterator last, typename ft::enable_if<!ft::is_integral<InputIterator>::value, void **>::type = 0 ) {
-				if (first >= last)
-					return;
 
 				iterator it = this->begin();
 				while (it != this->end() && it != position) {it++;}
 				if (it == this->end() && it != position)
 					return ;
 
-				difference_type n = last - first;
+				difference_type n = 0;
+				InputIterator tmp = first;
+				while (tmp != last) {
+					n++;
+					tmp++;
+				}
+
 				difference_type diff = position - this->begin();
 
 				if (this->_capacity < this->_size + n)

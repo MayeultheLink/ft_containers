@@ -601,31 +601,55 @@ int main() {
 		std::cout << "error" << std::endl;
 
 
-	std::cout << "-----------------------test-----------------------" << std::endl;
-	{
-	std::list<int> lst;
-	std::list<int>::iterator lst_it;
-	for (int i = 1; i < 5; ++i)
-		lst.push_back(i * 3);
 
-	ft::vector<int> vct(lst.begin(), lst.end());
-	std::cout << vct.size() << std::endl;
 
-	lst_it = lst.begin();
-	for (int i = 1; lst_it != lst.end(); ++i)
-		*lst_it++ = i * 5;
-	vct.assign(lst.begin(), lst.end());
-	std::cout << vct.size() << std::endl;
 
-	vct.insert(vct.end(), lst.rbegin(), lst.rend());
-	std::cout << vct.size() << std::endl;
+	ft::vector<int> test(3, 3);
 
+	ft::vector<ft::vector<int> > inception(5, test);
+	inception.resize(2);
+	inception.resize(3, test);
+	inception.reserve(4);
+	inception.assign(3, test);
+	inception.push_back(test);
+	inception.pop_back();
+
+	for (int i = 0; i < inception.size(); i++) {
+		for (int j = 0; j < inception[i].size(); j++)
+			std::cout << inception[i][j] << " ";
+		std::cout << std::endl;
 	}
-	std::cout << "-----------------------test-----------------------" << std::endl;
+	std::cout << std::endl;
 
-	{
 
+
+	ft::vector<ft::vector<int> > inceptionswap(inception);
+	ft::swap(inception, inceptionswap);
+	inception.swap(inceptionswap);
+	for (int i = 0; i < inceptionswap.size(); i++) {
+		for (int j = 0; j < inceptionswap[i].size(); j++)
+			std::cout << inceptionswap[i][j] << " ";
+		std::cout << std::endl;
 	}
+	std::cout << std::endl;
+
+	inception.clear();
+	ft::swap(inception, inceptionswap);
+
+	for (int i = 0; i < inception.size(); i++) {
+		for (int j = 0; j < inception[i].size(); j++)
+			std::cout << inception[i][j] << " ";
+		std::cout << std::endl;
+	}
+	std::cout << std::endl;
+
+	for (int i = 0; i < inceptionswap.size(); i++) {
+		for (int j = 0; j < inceptionswap[i].size(); j++)
+			std::cout << inceptionswap[i][j] << " ";
+		std::cout << std::endl;
+	}
+	std::cout << std::endl;
+
 
 	std::cout << std::endl;
 	}
