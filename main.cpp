@@ -13,6 +13,7 @@
 #include <iostream>
 #include <iterator>
 #include <vector>
+#include <list>
 
 class A {};
 
@@ -600,7 +601,31 @@ int main() {
 		std::cout << "error" << std::endl;
 
 
+	std::cout << "-----------------------test-----------------------" << std::endl;
+	{
+	std::list<int> lst;
+	std::list<int>::iterator lst_it;
+	for (int i = 1; i < 5; ++i)
+		lst.push_back(i * 3);
 
+	ft::vector<int> vct(lst.begin(), lst.end());
+	std::cout << vct.size() << std::endl;
+
+	lst_it = lst.begin();
+	for (int i = 1; lst_it != lst.end(); ++i)
+		*lst_it++ = i * 5;
+	vct.assign(lst.begin(), lst.end());
+	std::cout << vct.size() << std::endl;
+
+	vct.insert(vct.end(), lst.rbegin(), lst.rend());
+	std::cout << vct.size() << std::endl;
+
+	}
+	std::cout << "-----------------------test-----------------------" << std::endl;
+
+	{
+
+	}
 
 	std::cout << std::endl;
 	}

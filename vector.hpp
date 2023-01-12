@@ -274,8 +274,17 @@ namespace ft {
 
 			template< class InputIterator >
 			void assign( InputIterator first, InputIterator last, typename ft::enable_if<!ft::is_integral<InputIterator>::value, void **>::type = 0 ) {
+				if (first >= last)
+					return;
+
 				this->clear();
-				this->insert(this->begin(), first, last);
+				difference_type n = last - first;
+				this->reserve(n);
+
+				pointer p = this->_array;
+				for (iterator it = first; it != last; it++)
+					this->_allocator.construct(p++, *(it));
+				this->_size = n;
 			}
 
 			void assign( size_type n, const value_type & val ) {
@@ -309,10 +318,13 @@ namespace ft {
 
 			iterator insert( iterator position, const value_type & val ) {
 
+				difference_type diff = position - this->begin();
+
+				if (this->_capacity == 0)
+					this->reserve(1);
 				if (this->_capacity == this->_size)
 					this->reserve(this->_size * 2);
 
-				difference_type diff = position - this->begin();
 				pointer index = this->_array + this->_size;
 				pointer end = this->_array + diff;
 
@@ -323,7 +335,7 @@ namespace ft {
 				}
 				this->_allocator.construct(index, val);
 				this->_size++;
-				return position;
+				return iterator(index);
 			}
 
 			void insert( iterator position, size_type n, const value_type & val ) {
@@ -332,13 +344,14 @@ namespace ft {
 
 				iterator it = this->begin();
 				while (it != this->end() && it != position) {it++;}
-				if (it == this->end())
+				if (it == this->end() && it != position)
 					return ;
+
+				difference_type diff = position - this->begin();
 
 				if (this->_capacity < this->_size + n)
 					this->reserve(this->_size + n);
 				
-				difference_type diff = position - this->begin();
 				pointer index = this->_array + this->_size + n - 1;
 				pointer end = this->_array + diff + n - 1;
 
@@ -359,15 +372,15 @@ namespace ft {
 
 				iterator it = this->begin();
 				while (it != this->end() && it != position) {it++;}
-				if (it == this->end())
+				if (it == this->end() && it != position)
 					return ;
 
 				difference_type n = last - first;
+				difference_type diff = position - this->begin();
 
 				if (this->_capacity < this->_size + n)
 					this->reserve(this->_size + n);
 
-				difference_type diff = position - this->begin();
 				pointer index = this->_array + this->_size + n - 1;
 				pointer end = this->_array + diff + n - 1;
 

@@ -143,8 +143,18 @@ namespace ft {
 	}
 
 	template <class Iter>
+	reverse_iterator<Iter> operator+( const reverse_iterator<Iter> & lhs, const reverse_iterator<Iter> & rhs) {
+		return (rhs.base() + lhs.base());
+	}
+
+	template <class Iter>
 	reverse_iterator<Iter> operator-( typename reverse_iterator<Iter>::difference_type n, const reverse_iterator<Iter> & rhs) {
 		return (rhs - n);
+	}
+
+	template <class Iter>
+	reverse_iterator<Iter> operator-( const reverse_iterator<Iter> & lhs, const reverse_iterator<Iter> & rhs) {
+		return (lhs.base() - rhs.base());
 	}
 
 }
