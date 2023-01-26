@@ -1,6 +1,7 @@
 #include "enable_if.hpp"
 #include "equal.hpp"
 #include "is_integral.hpp"
+#include "iterator.hpp"
 #include "iterator_traits.hpp"
 #include "lexicographical_compare.hpp"
 #include "make_pair.hpp"
@@ -8,7 +9,6 @@
 #include "random_access_iterator.hpp"
 #include "reverse_iterator.hpp"
 #include "vector.hpp"
-#include "map.hpp"
 
 #include <iostream>
 #include <iterator>
@@ -649,34 +649,6 @@ int main() {
 		std::cout << std::endl;
 	}
 	std::cout << std::endl;
-
-
-
-	ft::map<int, char> m;
-	if (m.empty())
-		std::cout << "ok" << std::endl;
-	m.insert(ft::make_pair(2, 'b'));
-	if (m.empty())
-		std::cout << "ok" << std::endl;
-	m.insert(ft::make_pair(1, 'a'));
-	m.insert(ft::make_pair(3, 'c'));
-	ft::map<int, char>::iterator it = m.begin();
-	std::cout << it->first << std::endl;
-	it++;
-	std::cout << it->first << std::endl;
-	it = (m.insert(ft::make_pair(2, 'f'))).first;
-	it++;
-	std::cout << it->second << std::endl;
-
-	std::cout << m.size() << std::endl;
-
-
-
-
-
-
-
-
 
 
 	std::cout << std::endl;

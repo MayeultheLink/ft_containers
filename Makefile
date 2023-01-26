@@ -5,10 +5,10 @@ SRCS	=	main.cpp
 CC		=	c++
 CFLAGS	=	-Wall -Wextra -Werror
 OBJS	=	${SRCS:.cpp=.o}
-		
+
 all		:	${NAME}
 
-$(NAME)	:	 $(OBJS)
+$(NAME)	:	$(OBJS)
 		${CC} ${CFLAGS} -o ${NAME} ${OBJS}
 
 clean	:
