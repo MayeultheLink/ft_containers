@@ -3,7 +3,7 @@
 
 #include "pair.hpp"
 #include "map.hpp"
-#include "binary_search_tree.hpp"
+#include "node.hpp"
 
 #include <algorithm>
 
@@ -36,6 +36,10 @@ namespace ft {
 			}
 			~bst_iterator( void ) {}
 
+			s_node<value_type>* get_node( void ) {
+				return this->_node;
+			}
+
 			bst_iterator & operator=( bst_iterator<T> const & cpy ) {
 				this->_node = cpy._node;
 				return *this;
@@ -54,7 +58,7 @@ namespace ft {
 			}
 
 			reference operator*( void ) {
-				return (*this->_node->root);
+				return (this->_node->root);
 			}
 			
 			bst_iterator & operator++( void ) {
@@ -70,13 +74,14 @@ namespace ft {
 					s_node<value_type>* parent;
 					tmp = this->_node;
 					parent = this->_node->parent;
-					while (parent && tmp == parent->right)
+					while (!parent->is_end && tmp == parent->right)
 					{
 						tmp = parent;
 						parent = tmp->parent;
 					}
 					this->_node = parent;
 				}
+
 				return *this;
 			}
 
@@ -94,13 +99,14 @@ namespace ft {
 					s_node<value_type>* parent;
 					tmp = this->_node;
 					parent = this->_node->parent;
-					while (parent && tmp == parent->right)
+					while (!parent->is_end && tmp == parent->right)
 					{
 						tmp = parent;
 						parent = tmp->parent;
 					}
 					this->_node = parent;
 				}
+
 				return ret;
 			}
 

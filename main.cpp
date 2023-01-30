@@ -656,7 +656,7 @@ int main() {
 	if (m.empty())
 		std::cout << "ok" << std::endl;
 	m.insert(ft::make_pair(2, 'b'));
-	if (m.empty())
+	if (!m.empty())
 		std::cout << "ok" << std::endl;
 	m.insert(ft::make_pair(1, 'a'));
 	m.insert(ft::make_pair(3, 'c'));
@@ -670,7 +670,14 @@ int main() {
 
 	std::cout << m.size() << std::endl;
 
+	m.erase(it);
+	std::cout << m.size() << std::endl;
 
+	std::cout << "teeeeeest\n";
+
+	for (ft::map<int, char>::iterator i = m.begin(); i != m.end(); i++)
+		std::cout << i->first << " ";
+	std::cout << std::endl;
 
 
 
