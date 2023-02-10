@@ -2,8 +2,8 @@ NAME	=	ft_containers
 
 SRCS	=	main.cpp
 
-CC		=	c++
-CFLAGS	=	-Wall -Wextra -Werror
+CC		=	clang++
+CFLAGS	=	-Wall -Wextra -Werror -std=c++98
 OBJS	=	${SRCS:.cpp=.o}
 
 all		:	${NAME}

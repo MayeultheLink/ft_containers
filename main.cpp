@@ -15,6 +15,8 @@
 #include <vector>
 #include <list>
 
+#include "./main/main.hpp"
+
 class A {};
 
 template< class T >
@@ -680,7 +682,24 @@ int main() {
 	std::cout << std::endl;
 
 
+	std::cout << "-------------------------------------------------------\n";
 
+/*	ft::map<int, int> m1;
+    m1.insert(ft::pair<int, int>(1, 1));
+    m1.insert(ft::pair<int, int>(2, 4));
+    
+    // use of copy constructor
+    ft::map<int, int> m2(m1);
+    m2.insert(ft::pair<int, int>(3, 9));
+    std::cout << m2[3] << std::endl;
+    std::cout << m2[1] << std::endl;
+    std::cout << m2[2] << std::endl;
+    // std::cout << m2[4] << std::endl;
+*/
+
+	ft::map<int, int> m1;
+    m1[2] = 4;
+    std::cout << m1[2] << std::endl;
 
 
 

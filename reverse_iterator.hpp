@@ -2,6 +2,7 @@
 #define REVERSE_ITERATOR_HPP
 
 #include <iostream>
+#include "iterator_traits.hpp"
 
 namespace ft {
 
@@ -30,7 +31,7 @@ namespace ft {
 				this->it = rhs.base();
 				return *this;
 			}
-			virtual ~reverse_iterator() {}
+			~reverse_iterator() {}
 
 			Iter base() const {
 				return this->it;

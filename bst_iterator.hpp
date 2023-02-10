@@ -1,139 +1,183 @@
-#ifndef BST_ITERATOR_HPP
-#define BST_ITERATOR_HPP
+#ifndef MAP_ITERATOR_HPP
+# define MAP_ITERATOR_HPP
 
-#include "pair.hpp"
-#include "map.hpp"
-#include "node.hpp"
+# include "iterator_traits.hpp"
+# include "node.hpp"
 
-#include <algorithm>
-
-namespace ft {
-
-	template< typename T >
+namespace ft
+{
+	template < class T, class U >
 	class bst_iterator {
-	
-		public :
-
-			typedef typename ft::bidirectional_iterator_tag	iterator_category;
-			typedef T					value_type;
-			typedef std::ptrdiff_t				difference_type;
-			typedef size_t					size_type;
-			typedef T*					pointer;
-			typedef T&					reference;
-			typedef const T*				const_pointer;
-			typedef const T&				const_reference;
-
-		private :
-
-			s_node<value_type>*	_node;
 
 		public:
 
-			bst_iterator( void ) : _node(NULL) {}
-			bst_iterator( s_node<value_type>* n ) : _node(n) {}
-			bst_iterator( const bst_iterator<T> & src ) {
-				this->_node = src._node;
-			}
-			~bst_iterator( void ) {}
+			typedef typename ft::bidirectional_iterator_tag	iterator_category;
+			typedef T					value_type;
+			typedef T*					node;
+			typedef std::ptrdiff_t				difference_type;
+			typedef size_t					size_type;
+			typedef U*					pointer;
+			typedef U&					reference;
+			typedef const pointer				const_pointer;
 
-			s_node<value_type>* get_node( void ) {
+		private:
+
+			node _node;
+
+		public:
+
+			bst_iterator(void) : _node(NULL) {}
+			bst_iterator(const bst_iterator & src) : _node(src.get_node()) {}
+			bst_iterator(node n) : _node(n) {}
+			~bst_iterator(void) {}
+
+			node get_node(void) const {
 				return this->_node;
 			}
 
-			bst_iterator & operator=( bst_iterator<T> const & cpy ) {
-				this->_node = cpy._node;
+			bst_iterator &operator= (const bst_iterator & rhs)
+			{
+				if (this != &rhs)
+					this->_node = rhs._node;
 				return *this;
 			}
 
-			bool operator==( const bst_iterator & src ) const {
-				return (this->_node == src._node);
+			bst_iterator &operator++ (void)
+			{
+				this->_node = this->_node->next();
+				return *this;
 			}
 
-			bool operator!=( const bst_iterator & src ) const {
-				return !(operator==(src));
-			}
-
-			pointer operator->( void ) {
-				return (&this->_node->root);
-			}
-
-			reference operator*( void ) {
-				return (this->_node->root);
-			}
-			
-			bst_iterator & operator++( void ) {
-				s_node<value_type>* tmp = this->_node->right;
-				if (tmp)
-				{
-					while (tmp->left)
-						tmp = tmp->left;
-					this->_node = tmp;
-				}
+			bst_iterator &operator-- (void)
+			{
+				if (this->_node->is_end)
+					this->_node = this->_node->right;
 				else
-				{
-					s_node<value_type>* parent;
-					tmp = this->_node;
-					parent = this->_node->parent;
-					while (!parent->is_end && tmp == parent->right)
-					{
-						tmp = parent;
-						parent = tmp->parent;
-					}
-					this->_node = parent;
-				}
-
+					this->_node = this->_node->prev();
 				return *this;
 			}
 
-			bst_iterator operator++( int ) {
-				bst_iterator ret = *this;
-				s_node<value_type>* tmp = this->_node->right;
-				if (tmp)
-				{
-					while (tmp->left)
-						tmp = tmp->left;
-					this->_node = tmp;
-				}
-				else
-				{
-					s_node<value_type>* parent;
-					tmp = this->_node;
-					parent = this->_node->parent;
-					while (!parent->is_end && tmp == parent->right)
-					{
-						tmp = parent;
-						parent = tmp->parent;
-					}
-					this->_node = parent;
-				}
-
-				return ret;
-			}
-
-			bst_iterator & operator--( void ) {
-				--this->it;
-				return *this;
-			}
-
-			bst_iterator operator--( int ) {
+			bst_iterator operator++ (int)
+			{
 				bst_iterator tmp = *this;
-				--this->it;
+				this->_node = this->_node->next();
 				return tmp;
 			}
 
+			bst_iterator operator-- (int)
+			{
+				bst_iterator tmp = *this;
+				if (this->_node->is_end)
+					this->_node = this->_node->right;
+				else
+					this->_node = this->_node->prev();
+				return tmp;
+			}
+
+			bool operator== (const bst_iterator & rhs) const
+			{
+				return (this->_node == rhs._node);
+			}
+
+			bool operator!= (const bst_iterator &rhs) const
+			{
+				return this->_node != rhs._node;
+			}
+
+			reference operator* (void) const
+			{
+				return this->_node->root;
+			}
+
+			pointer operator-> (void) const
+			{
+				return &this->_node->root;
+			}
 	};
 
-		template <typename Ite1, typename Ite2>
-		bool operator==(const bst_iterator<Ite1> &lhs, const bst_iterator<Ite2> &rhs)
-		{
-			return (lhs.base() == rhs.base());
-		}
+	template <class T, class U, class bst_iterator>
+	class const_bst_iterator {
 
-		template <typename Ite1, typename Ite2>
-		bool operator!=(const bst_iterator<Ite1> &lhs, const bst_iterator<Ite2> &rhs)
-		{
-			return (lhs.base() != rhs.base());
-		}
+		public:
+
+			typedef typename ft::bidirectional_iterator_tag	iterator_category;
+			typedef T					value_type;
+			typedef T*					node;
+			typedef std::ptrdiff_t				difference_type;
+			typedef size_t					size_type;
+			typedef U*					pointer;
+			typedef U&					reference;
+			typedef const value_type*			const_pointer;
+
+		private:
+
+			node _node;
+
+		public:
+
+			const_bst_iterator(void) : _node(NULL) {}
+			const_bst_iterator(const const_bst_iterator & src) : _node(src.get_node()) {}
+			const_bst_iterator(const bst_iterator & src) : _node(src.get_node()) {}
+			const_bst_iterator(node n) : _node(n) {}
+			~const_bst_iterator(void) {}
+
+			node get_node(void) const {
+				return this->_node;
+			}
+
+			const_bst_iterator &operator = (const const_bst_iterator & rhs)
+			{
+				if (this != &rhs)
+					this->_node = rhs._node;
+				return *this;
+			}
+
+			const_bst_iterator &operator++ (void)
+			{
+				this->_node = this->_node->next();
+				return *this;
+			}
+
+			const_bst_iterator &operator-- (void)
+			{
+				this->_node = this->_node->prev();
+				return *this;
+			}
+
+			const_bst_iterator operator++ (int)
+			{
+				const_bst_iterator tmp = *this;
+				this->_node = this->_node->next();
+				return tmp;
+			}
+
+			const_bst_iterator operator-- (int)
+			{
+				const_bst_iterator tmp = *this;
+				this->_node = this->_node->prev();
+				return tmp;
+			}
+
+			bool operator== (const const_bst_iterator & rhs) const
+			{
+				return (this->_node == rhs._node);
+			}
+
+			bool operator!= (const const_bst_iterator &rhs) const
+			{
+				return this->_node != rhs._node;
+			}
+
+			reference operator* (void) const
+			{
+				return this->_node->root;
+			}
+
+			pointer operator-> (void) const
+			{
+				return &this->_node->root;
+			}
+	};
 
 }
 

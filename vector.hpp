@@ -77,6 +77,7 @@ namespace ft {
 					this->_allocator.construct(this->_array + i++, *first);
 					this->_size++;
 				}
+				this->shrink_to_fit();
 			}
 
 			vector( const vector & x ) : _size(0), _capacity(0), _array(NULL) {
@@ -92,7 +93,7 @@ namespace ft {
 				}
 				this->_allocator = x.get_allocator();
 				this->_size = x.size();
-				this->_capacity = x.capacity();
+				this->_capacity = x.size();
 				if (x.size() > 0)
 				{
 					this->_array = this->_allocator.allocate(this->_capacity);
@@ -178,7 +179,12 @@ namespace ft {
 				else if (n > this->_size) {
 					if (n > this->_capacity)
 					{
-						pointer tmp = this->_allocator.allocate(n);
+						size_type tmp_capacity;
+						if (n > this->_size * 2)
+							tmp_capacity = n;
+						else
+							tmp_capacity = this->_size * 2;
+						pointer tmp = this->_allocator.allocate(tmp_capacity);
 						int i = 0;
 						for (iterator it = this->begin(); it != this->end(); it++)
 							this->_allocator.construct(tmp + i++, *it);
@@ -189,7 +195,7 @@ namespace ft {
 							this->_allocator.deallocate(this->_array, this->_capacity);
 						}
 						this->_array = tmp;
-						this->_capacity = n;
+						this->_capacity = tmp_capacity;
 					}
 					for (size_t i = this->_size; i < n; i++)
 						this->_allocator.construct(this->_array + i, val);
@@ -226,9 +232,23 @@ namespace ft {
 			}
 
 			void shrink_to_fit( void ) {
-				if (this->_capacity && this->_size != this->_capacity)
-					this->_allocator.deallocate(this->_array + this->_size, this->_capacity - this->_size);
-				this->_capacity = this->_size;
+				if (this->_capacity != this->_size)
+				{
+					pointer tmp = this->_allocator.allocate(this->_size);
+					iterator it = this->begin();
+					for (size_type i = 0; i < this->_size; i++)
+					{
+						this->_allocator.construct(tmp + i, *it);
+						it++;
+					}
+					size_type size = this->_size;
+					this->clear();
+					this->_allocator.deallocate(this->_array, this->_capacity);
+					this->_array = tmp;
+					this->_size = size;
+					this->_capacity = size;
+				}
+
 			}
 
 	/*-----------------------------------------------------------------------------------------*/
@@ -428,13 +448,10 @@ namespace ft {
 			}
 
 			void swap( vector & x ) {
+
 				size_type tmp_size = x.size();
 				x._size = this->_size;
 				this->_size = tmp_size;
-
-				size_type tmp_capacity = x.capacity();
-				x._capacity = this->_capacity;
-				this->_capacity = tmp_capacity;
 
 				allocator_type tmp_allocator = x.get_allocator();
 				x._allocator = this->_allocator;
@@ -443,6 +460,11 @@ namespace ft {
 				pointer tmp_array = x._array;
 				x._array = this->_array;
 				this->_array = tmp_array;
+
+				size_type tmp_capacity = x.capacity();
+				x._capacity = this->_capacity;
+				this->_capacity = tmp_capacity;
+
 			}
 
 			void clear( void ) {
