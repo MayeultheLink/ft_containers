@@ -1,130 +1,163 @@
-#include "enable_if.hpp"
-#include "equal.hpp"
-#include "is_integral.hpp"
-#include "iterator_traits.hpp"
-#include "lexicographical_compare.hpp"
-#include "make_pair.hpp"
-#include "pair.hpp"
-#include "random_access_iterator.hpp"
-//#include "../bst_iterator.hpp"
 #include "map.hpp"
 
 #include <iostream>
-#include <iterator>
 #include <map>
-#include <list>
+
+template <typename T, typename U>
+void print(NAMESPACE::map<T, U> v) {
+	std::cout << v.size() << std::endl;
+	for (typename NAMESPACE::map<T, U>::iterator it = v.begin(); it != v.end(); it++)
+		std::cout << it->first << it->second;
+}
 
 int main() {
 
-	{
-	std::cout << "/*-------------------------------------------------------------*/" << std::endl;
-	std::cout << "/*                                                             */" << std::endl;
-	std::cout << "/*                                                             */" << std::endl;
-	std::cout << "/*                             MAP                             */" << std::endl;
-	std::cout << "/*                                                             */" << std::endl;
-	std::cout << "/*                                                             */" << std::endl;
-	std::cout << "/*-------------------------------------------------------------*/" << std::endl;
-	std::cout << std::endl;
+/*------------------ CONSTRUCTORS/DESTRUCTOR -------------------*/
 
+		NAMESPACE::map<int, int> v1;
+		print(v1);
+		for (int i = 0; i < 50; i++)
+			v1[i] = i;
 
+		NAMESPACE::map<int, int> v2(v1.begin(), v1.end());
+		print(v2);
 
+		NAMESPACE::map<int, int> v3(v2);
+		print(v3);
 
-	NAMESPACE::map<int, int> v;
+		NAMESPACE::map<int, int> v4;
+		v4 = v3;
+		print(v4);
 
-	std::cout << v.size() << " " << v.max_size() << std::endl;
+		if (v1.value_comp()(*v3.begin(), *v4.begin()))
+			std::cout << "ok";
+		else
+			std::cout << "error";
 
-	NAMESPACE::pair<int, int> p(1, 10);
-	v.insert(p);
+/*------------------ ELEMENT ACCESS -------------------*/
 
-	std::cout << v.size() << " " << v.max_size() << std::endl;
+		std::cout << v1.at(2);
+		std::cout << v1[3];
 
-	for (NAMESPACE::map<int, int>::iterator it = v.begin(); it != v.end(); it++)
-		std::cout << it->first << " ";
-	std::cout << std::endl;
+		std::cout << v2.at(3);
+		std::cout << v2[2];
 
-	NAMESPACE::pair<int, int> p5(6, 60);
-	v.insert(p5);
-	for (NAMESPACE::map<int, int>::reverse_iterator it = v.rbegin(); it != v.rend(); it++)
-		std::cout << it->first << " ";
-	std::cout << std::endl;
+/*------------------ ITERATORS -------------------*/
 
-/*
-	NAMESPACE::map<int, int> new_v(v);
-	for (NAMESPACE::map<int, int>::iterator it = v.begin(); it != v.end(); it++)
-		std::cout << it->first << " ";
-	std::cout << std::endl;
-	for (NAMESPACE::map<int, int>::iterator it = new_v.begin(); it != new_v.end(); it++)
-		std::cout << it->first << " ";
-	std::cout << std::endl;
-	if (new_v == v)
-		std::cout << "ok" << std::endl;
-	NAMESPACE::map<int, int> new_v2;
-	new_v2 = v;
-	if (new_v2 == v)
-		std::cout << "ok" << std::endl;
+		for (NAMESPACE::map<int, int>::iterator it = v1.begin(); it != v1.end(); it++)
+		{
+			std::cout << it->first;
+			it->second = 5;
+		}
+		std::cout << (++(++(++(v1.begin()))))->first << (--(--(--(v1.end()))))->first;
 
-	ft::pair<int, int> p1(2, 20);
-	ft::pair<int, int> p2(3, 30);
-	ft::pair<int, int> p3(4, 40);
-	v.insert(p1);
-	v.insert(p2);
-	v.insert(p3);
+		for (NAMESPACE::map<int, int>::const_iterator it = v1.begin(); it != v1.end(); it++)
+			std::cout << it->first;
 
-	std::cout << v[2] << std::endl;
-	std::cout << v.at(2) << std::endl;
-	std::cout << v.find(3)->first << std::endl;
-	std::cout << v.lower_bound(3)->first << std::endl;
-	std::cout << std::endl;
+/*------------------ REVERSE ITERATORS -------------------*/
 
-	v.insert(v.begin(), p3);
-	std::cout << v.size() << " " << v.max_size() << std::endl;
-	for (NAMESPACE::map<int, int>::iterator it = v.begin(); it != v.end(); it++)
-		std::cout << it->first << " ";
-	std::cout << std::endl;
+		for (NAMESPACE::map<int, int>::reverse_iterator it = v1.rbegin(); it != v1.rend(); it++)
+		{
+			std::cout << it->first;
+			it->second = 5;
+		}
+		std::cout << (++(++(++(v1.rbegin()))))->first << (--(--(--(v1.rend()))))->first;
 
-	NAMESPACE::map<int, int> v2;
-	v.insert(v.begin(), v.end());
-	std::cout << v.size() << " " << v.max_size() << std::endl;
-	for (NAMESPACE::map<int, int>::iterator it = v.begin(); it != v.end(); it++)
-		std::cout << it->first << " ";
-	std::cout << std::endl;
+		for (NAMESPACE::map<int, int>::const_reverse_iterator it = v1.rbegin(); it != v1.rend(); it++)
+			std::cout << it->first;
 
-	NAMESPACE::map<int, int> std_tmp(v);
-	std::cout << v.size() << " " << v.max_size() << std::endl;
-	for (NAMESPACE::map<int, int>::iterator it = v.begin(); it != v.end(); it++)
-		std::cout << it->first << " ";
-	std::cout << std::endl;
+/*------------------ CAPACITY -------------------*/
 
-	v.erase(v.begin());
-	std::cout << v.size() << " " << v.max_size() << std::endl;
-	for (NAMESPACE::map<int, int>::iterator it = v.begin(); it != v.end(); it++)
-		std::cout << it->first << " ";
-	std::cout << std::endl;
+		std::cout << v1.empty();
+		print(v1);
 
-	v.erase((v.begin() + 2));
-	std::cout << v.size() << " " << v.max_size() << std::endl;
-	for (NAMESPACE::map<int, int>::iterator it = v.begin(); it != v.end(); it++)
-		std::cout << it->first << " ";
-	std::cout << std::endl;
+/*------------------ MODIFIERS -------------------*/
 
-	std::cout << v.count(p2) << " " << v.max_size() << std::endl;
-	for (NAMESPACE::map<int, int>::iterator it = v.begin(); it != v.end(); it++)
-		std::cout << it->first << " ";
-	std::cout << std::endl;
+		v1.clear();
+		print(v1);
 
-	v.clear();
-	std::cout << v.size() << " " << v.max_size() << std::endl;
-	for (NAMESPACE::map<int, int>::iterator it = v.begin(); it != v.end(); it++)
-		std::cout << it->first << " ";
-	std::cout << std::endl;
+		NAMESPACE::map<int, int>::iterator it9 = v2.insert(NAMESPACE::make_pair(51, 51)).first;
+		std::cout << it9->first;
 
-	std::cout << typeid(v.get_allocator()).name() << std::endl;
+		v2.insert(v3.begin(), v3.end());
+		print(v2);
 
-*/
-	}
+		v2.erase(v2.begin());
+		print(v2);
+		for (; it9 != v2.begin(); it9--)
+			std::cout << it9->first;
 
-	
+		v3.erase(++(++(++(v3.begin()))), --(--(--(v3.end()))));
+		print(v3);
 
+		NAMESPACE::map<int, int>::iterator its = v3.begin();
+		std::cout << its->first;
+		v3.swap(v2);
+		print(v3);
+		print(v2);
+		std::cout << its->first;
+		std::cout << (*++its).first;
+		print(v3);
+		print(v2);
+		v3.swap(v2);
+		print(v3);
+		print(v2);
+
+/*------------------ LOOK UP -------------------*/
+
+		std::cout << v1.count(3);
+		
+		NAMESPACE::map<int, int>::iterator it3 = v1.find(3);
+		std::cout << it3->first;
+		NAMESPACE::map<int, int>::const_iterator it4 = v1.find(3);
+		std::cout << it4->first;
+
+		NAMESPACE::map<int, int>::iterator it5 = v1.equal_range(6).first;
+		NAMESPACE::map<int, int>::iterator it6 = v1.equal_range(6).second;
+		std::cout << it5->first;
+		std::cout << it6->first;
+
+		NAMESPACE::map<int, int>::iterator it7 = v1.lower_bound(9);
+		std::cout << it7->first;
+		NAMESPACE::map<int, int>::iterator it8 = v1.upper_bound(9);
+		std::cout << it8->first;
+
+/*------------------ NON MEMBER FUNCTIONS -------------------*/
+
+		if (v1 == v2)
+			std::cout << "ok";
+		else
+			std::cout << "error";
+		if (v1 != v2)
+			std::cout << "ok";
+		else
+			std::cout << "error";
+
+		v2.insert(v2.begin(), NAMESPACE::make_pair(1, 1));
+		if (v1 != v2)
+			std::cout << "ok";
+		else
+			std::cout << "error";
+		if (v1 < v2)
+			std::cout << "ok";
+		else
+			std::cout << "error";
+		if (v1 <= v2)
+			std::cout << "ok";
+		else
+			std::cout << "error";
+		if (v1 >= v2)
+			std::cout << "ok";
+		else
+			std::cout << "error";
+		if (v1 > v2)
+			std::cout << "ok";
+		else
+			std::cout << "error";
+
+		NAMESPACE::swap(v1, v2);
+		print(v1);
+		print(v2);
 
 	return 0;
 }

@@ -1,11 +1,6 @@
 #ifndef VECTOR_HPP
 #define VECTOR_HPP
 
-#include <iterator>
-#include <iostream>
-#include <memory>
-#include <stdexcept>
-
 #include "enable_if.hpp"
 #include "is_integral.hpp"
 #include "iterator_traits.hpp"
@@ -302,6 +297,10 @@ namespace ft {
 			}
 
 			value_type * data( void ) {
+				return this->_array;
+			}
+
+			value_type * data( void ) const {
 				return this->_array;
 			}
 

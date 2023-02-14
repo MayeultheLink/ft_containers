@@ -1,10 +1,7 @@
 #ifndef MAP_HPP
 #define MAP_HPP
 
-#include <cstddef>
-#include <functional>
-
-#include "make_pair.hpp"
+#include "pair.hpp"
 #include "lexicographical_compare.hpp"
 #include "node.hpp"
 #include "bst_iterator.hpp"
@@ -17,22 +14,22 @@ namespace ft {
 		
 		public :
 
-			typedef Key							key_type;
-			typedef T							mapped_type;
-			typedef typename ft::pair<const key_type, mapped_type>		value_type;
-			typedef Compare							key_compare;
-			typedef s_node<value_type>					node;
-			typedef typename Alloc::template rebind<node>::other		allocator_type;
-			typedef typename allocator_type::reference			reference;
-			typedef typename allocator_type::const_reference		const_reference;
-			typedef typename allocator_type::pointer			pointer;
-			typedef typename allocator_type::const_pointer			const_pointer;
-			typedef typename ft::bst_iterator<node, value_type>			iterator;
+			typedef Key									key_type;
+			typedef T									mapped_type;
+			typedef typename ft::pair<const key_type, mapped_type>				value_type;
+			typedef Compare									key_compare;
+			typedef s_node<value_type>							node;
+			typedef typename Alloc::template rebind<node>::other				allocator_type;
+			typedef typename allocator_type::reference					reference;
+			typedef typename allocator_type::const_reference				const_reference;
+			typedef typename allocator_type::pointer					pointer;
+			typedef typename allocator_type::const_pointer					const_pointer;
+			typedef typename ft::bst_iterator<node, value_type>				iterator;
 			typedef typename ft::const_bst_iterator<node, value_type, iterator>		const_iterator;
-			typedef typename ft::reverse_iterator<iterator>			reverse_iterator;
-			typedef typename ft::reverse_iterator<const_iterator>		const_reverse_iterator;
-			typedef typename ft::iterator_traits<iterator>::difference_type	difference_type;
-			typedef size_t							size_type;
+			typedef typename ft::reverse_iterator<iterator>					reverse_iterator;
+			typedef typename ft::reverse_iterator<const_iterator>				const_reverse_iterator;
+			typedef typename ft::iterator_traits<iterator>::difference_type			difference_type;
+			typedef size_t									size_type;
 			
 			class value_compare {
 				private :
@@ -408,11 +405,6 @@ namespace ft {
 					this->erase(first);
 					first = tmp;
 				}
-				/*
-				if (first == last)
-					return last;
-				this->erase(++first, last);
-				this->erase(tmp);*/
 				return last;
 			}
 

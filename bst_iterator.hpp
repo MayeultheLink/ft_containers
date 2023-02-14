@@ -6,6 +6,7 @@
 
 namespace ft
 {
+
 	template < class T, class U >
 	class bst_iterator {
 
@@ -125,7 +126,7 @@ namespace ft
 				return this->_node;
 			}
 
-			const_bst_iterator &operator = (const const_bst_iterator & rhs)
+			const_bst_iterator &operator= (const const_bst_iterator & rhs)
 			{
 				if (this != &rhs)
 					this->_node = rhs._node;
@@ -140,7 +141,10 @@ namespace ft
 
 			const_bst_iterator &operator-- (void)
 			{
-				this->_node = this->_node->prev();
+				if (this->_node->is_end)
+					this->_node = this->_node->right;
+				else
+					this->_node = this->_node->prev();
 				return *this;
 			}
 
@@ -154,7 +158,10 @@ namespace ft
 			const_bst_iterator operator-- (int)
 			{
 				const_bst_iterator tmp = *this;
-				this->_node = this->_node->prev();
+				if (this->_node->is_end)
+					this->_node = this->_node->right;
+				else
+					this->_node = this->_node->prev();
 				return tmp;
 			}
 

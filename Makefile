@@ -1,23 +1,32 @@
-NAME	=	ft_containers
+NAME		=	ft_containers
 
-SRCS	=	main.cpp
+SRCS		=	main.cpp
 
-CC		=	clang++
-CFLAGS	=	-Wall -Wextra -Werror -std=c++98
-OBJS	=	${SRCS:.cpp=.o}
+CC		=	c++
+CFLAGS		=	-Wall -Wextra -Werror -std=c++98
+OBJS		=	${SRCS:.cpp=.o}
 
 all		:	${NAME}
 
 $(NAME)	:	$(OBJS)
-		${CC} ${CFLAGS} -o ${NAME} ${OBJS}
+			${CC} ${CFLAGS} ${OBJS} -o ${NAME}
 
-clean	:
-		rm -f ${OBJS}
+vector		:
+			@bash ./tester/vector.sh
+map		:
+			@bash ./tester/map.sh
+stack		:
+			@bash ./tester/stack.sh
 
-fclean	:
-		rm -f ${OBJS}
-		rm -f ${NAME}
+clean		:
+			rm -f ${OBJS}
+
+cleantest	:
+			rm -f std_map std_vector std_stack ft_map ft_vector ft_stack *.txt
+
+fclean		:
+			rm -f ${OBJS} ${NAME}
 
 re		:	fclean all
 
-.PHONY	:	all clean fclean re
+.PHONY		:	all vector map stack clean cleantest fclean re
