@@ -108,19 +108,25 @@ int main() {
 		std::cout << v1.count(3);
 		
 		NAMESPACE::map<int, int>::iterator it3 = v1.find(3);
-		std::cout << it3->first;
+		if (it3 != v1.end())
+			std::cout << it3->first;
 		NAMESPACE::map<int, int>::const_iterator it4 = v1.find(3);
-		std::cout << it4->first;
+		if (it4 != v1.end())
+			std::cout << it4->first;
 
 		NAMESPACE::map<int, int>::iterator it5 = v1.equal_range(6).first;
 		NAMESPACE::map<int, int>::iterator it6 = v1.equal_range(6).second;
-		std::cout << it5->first;
-		std::cout << it6->first;
+		if (it5 != v1.end())
+			std::cout << it5->first;
+		if (it6 != v1.end())
+			std::cout << it6->first;
 
 		NAMESPACE::map<int, int>::iterator it7 = v1.lower_bound(9);
-		std::cout << it7->first;
+		if (it7 != v1.end())
+			std::cout << it7->first;
 		NAMESPACE::map<int, int>::iterator it8 = v1.upper_bound(9);
-		std::cout << it8->first;
+		if (it8 != v1.end())
+			std::cout << it8->first;
 
 /*------------------ NON MEMBER FUNCTIONS -------------------*/
 

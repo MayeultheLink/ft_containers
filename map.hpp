@@ -526,28 +526,28 @@ namespace ft {
 
 			iterator find( const key_type & k ) {
 				node* tmp = this->_tree;
-				while (tmp && !this->_is_equal(k, tmp->root.first))
+				while (tmp && !tmp->is_end && !this->_is_equal(k, tmp->root.first))
 				{
 					if (key_compare()(k, tmp->root.first))
 						tmp = tmp->left;
 					else
 						tmp = tmp->right;
 				}
-				if (!tmp)
+				if (!tmp || tmp->is_end)
 					return this->end();
 				return iterator(tmp);
 			}
 
 			const_iterator find( const key_type & k ) const {
 				node* tmp = this->_tree;
-				while (tmp && !this->_is_equal(k, tmp->root.first))
+				while (tmp && !tmp->is_end && !this->_is_equal(k, tmp->root.first))
 				{
 					if (key_compare()(k, tmp->root.first))
 						tmp = tmp->left;
 					else
 						tmp = tmp->right;
 				}
-				if (!tmp)
+				if (!tmp || tmp->is_end)
 					return this->end();
 				return const_iterator(tmp);
 			}

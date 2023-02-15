@@ -76,10 +76,6 @@ namespace ft {
 			}
 
 			vector( const vector & x ) : _size(0), _capacity(0), _array(NULL) {
-				*this = x;
-			}
-
-			vector & operator=( const vector & x ) {
 				if (this->_capacity)
 				{
 					for (size_type i = 0; i < this->_size; i++)
@@ -92,6 +88,25 @@ namespace ft {
 				if (x.size() > 0)
 				{
 					this->_array = this->_allocator.allocate(this->_capacity);
+					for (size_type i = 0; i < x.size(); i++)
+						this->_allocator.construct(this->_array + i, x.at(i));
+				}
+			}
+
+			vector & operator=( const vector & x ) {
+				if (this->_capacity)
+				{
+					for (size_type i = 0; i < this->_size; i++)
+						this->_allocator.destroy(this->_array + i);
+					this->_allocator.deallocate(this->_array, this->_capacity);
+				}
+				this->_allocator = x.get_allocator();
+				this->_size = x.size();
+				if (this->_capacity < x.size())
+					this->_capacity = x.capacity();
+				this->_array = this->_allocator.allocate(this->_capacity);
+				if (x.size() > 0)
+				{
 					for (size_type i = 0; i < x.size(); i++)
 						this->_allocator.construct(this->_array + i, x.at(i));
 				}
@@ -400,7 +415,12 @@ namespace ft {
 				difference_type diff = position - this->begin();
 
 				if (this->_capacity < this->_size + n)
-					this->reserve(this->_size + n);
+				{
+					if (this->_size + n <= this->_size * 2)
+						this->reserve(this->_size * 2);
+					else
+						this->reserve(this->_size + n);
+				}
 				
 				pointer index = this->_array + this->_size + n - 1;
 				pointer end = this->_array + diff + n - 1;
