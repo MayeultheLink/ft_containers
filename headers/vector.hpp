@@ -94,6 +94,12 @@ namespace ft {
 			}
 
 			vector & operator=( const vector & x ) {
+				if (this != &x)
+				{
+					this->clear();
+					this->assign(x.begin(), x.end());
+				}
+				/*
 				if (this->_capacity)
 				{
 					for (size_type i = 0; i < this->_size; i++)
@@ -109,7 +115,7 @@ namespace ft {
 				{
 					for (size_type i = 0; i < x.size(); i++)
 						this->_allocator.construct(this->_array + i, x.at(i));
-				}
+				}*/
 				return *this;
 			}
 
@@ -258,7 +264,6 @@ namespace ft {
 					this->_size = size;
 					this->_capacity = size;
 				}
-
 			}
 
 	/*-----------------------------------------------------------------------------------------*/

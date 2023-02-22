@@ -54,6 +54,11 @@ int main() {
 		for (NAMESPACE::map<int, int>::const_iterator it = v1.begin(); it != v1.end(); it++)
 			std::cout << it->first;
 
+		NAMESPACE::map<int, int>::iterator it = v1.begin();
+		v1.erase(it);
+		if (it != v1.end())
+			std::cout << it->first;
+
 /*------------------ REVERSE ITERATORS -------------------*/
 
 		for (NAMESPACE::map<int, int>::reverse_iterator it = v1.rbegin(); it != v1.rend(); it++)

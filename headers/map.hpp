@@ -283,6 +283,76 @@ namespace ft {
 				return to_insert;
 			}
 
+			void _erase( node* &tree, key_type key ) {
+				
+				node* curr = this->find(key).get_node();
+				node* parent = curr->parent;
+
+				if (curr->is_end)
+					return ;
+
+				if (!curr->left && !curr->right)
+				{
+					if (curr != tree)
+					{
+						if (parent->left == curr)
+							parent->left = NULL;
+						else
+							parent->right = NULL;
+					}
+					else
+						tree = NULL;
+					this->_alloc.destroy(curr);
+					this->_alloc.deallocate(curr, 1);
+				}
+
+				else if (curr->left && curr->right)
+				{
+					node* successor = this->_min(curr->right);
+
+					value_type val = successor->root;
+
+					this->_erase(tree, successor->root.first);
+
+					node* save_p = curr->parent;
+					node* save_l = curr->left;
+					node* save_r = curr->right;
+					this->_alloc.destroy(curr);
+					this->_alloc.construct(curr, node(val));
+					curr->parent = save_p;
+					curr->left = save_l;
+					curr->right = save_r;
+
+				}
+
+				else
+				{
+					node* child = (curr->left) ? curr->left : curr->right;
+					
+					if (curr != tree)
+					{
+						if (curr == parent->left)
+						{
+							parent->left = child;
+							child->parent = parent;
+						}
+						else
+						{
+							parent->right = child;
+							child->parent = parent;
+						}
+					}
+					else
+					{
+						tree = child;
+						tree->parent = this->_end;
+					}
+					this->_alloc.destroy(curr);
+					this->_alloc.deallocate(curr, 1);
+				}
+
+			}
+
 			node* _first_element( void ) const {
 				if (this->_size == 0)
 					return this->_end;
@@ -340,61 +410,12 @@ namespace ft {
 
 			void erase( iterator position ) {
 
-				node* to_erase = position.get_node();
-				node* to_erase_son;
-
-				if (!to_erase->left && !to_erase->right) {
-					if (to_erase->parent->is_end)
-						this->_tree = this->_end;
-					else
-					{
-						if (to_erase == to_erase->parent->left)
-							to_erase->parent->left = NULL;
-						else
-							to_erase->parent->right = NULL;
-					}
-				}
-				else if (!to_erase->left || !to_erase->right)
-				{
-					if (to_erase->left)
-						to_erase_son = to_erase->left;
-					else
-						to_erase_son = to_erase->right;
-					to_erase_son->parent = to_erase->parent;
-					if (to_erase->parent->is_end)
-						this->_tree = to_erase_son;
-					else {
-						if (to_erase->parent->left == to_erase)
-							to_erase->parent->left = to_erase_son;
-						else
-							to_erase->parent->right = to_erase_son;
-					}
-				}
-				else {
-					node* left_max = this->_max(to_erase->left);
-					if (left_max != to_erase->left)
-					{
-						node* tmp = left_max->left;
-						if (tmp)
-						{
-							left_max->parent->right = tmp;
-							tmp->parent = left_max->parent;
-						}
-					}
-					left_max->right = to_erase->right;
-					if (left_max->right)
-						left_max->right->parent = left_max;
-					left_max->parent = to_erase->parent;
-					if (!left_max->parent->is_end && left_max->parent->left == to_erase)
-						left_max->parent->left = left_max;
-					else if (!left_max->parent->is_end && left_max->parent->right == to_erase)
-						left_max->parent->right = left_max;
-					if (left_max->parent->is_end)
-						this->_tree = left_max;
-				}
-				this->_alloc.destroy(to_erase);
-				this->_alloc.deallocate(to_erase, 1);
+				this->_erase(this->_tree, position->first);
+				if (!this->_tree)
+					this->_tree = this->_end;
 				this->_size--;
+				this->_end->right = this->_last_element();
+
 			}
 
 			iterator erase( iterator first, iterator last ) {

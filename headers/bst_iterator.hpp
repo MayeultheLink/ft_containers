@@ -36,6 +36,15 @@ namespace ft
 				return this->_node;
 			}
 
+			T cpy_node(void) const {
+				T tmp(this->_node->root);
+				tmp.parent = this->_node->parent;
+				tmp.left = this->_node->left;
+				tmp.right = this->_node->right;
+				tmp.is_end = this->_node->is_end;
+				return tmp;
+			}
+
 			bst_iterator &operator= (const bst_iterator & rhs)
 			{
 				if (this != &rhs)
@@ -124,6 +133,15 @@ namespace ft
 
 			node get_node(void) const {
 				return this->_node;
+			}
+
+			node cpy_node(void) const {
+				node tmp(this->_node->root);
+				tmp->parent = this->_node->parent;
+				tmp->left = this->_node->left;
+				tmp->right = this->_node->right;
+				tmp->is_end = this->_node->is_end;
+				return tmp;
 			}
 
 			const_bst_iterator &operator= (const const_bst_iterator & rhs)
