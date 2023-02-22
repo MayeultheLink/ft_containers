@@ -99,23 +99,6 @@ namespace ft {
 					this->clear();
 					this->assign(x.begin(), x.end());
 				}
-				/*
-				if (this->_capacity)
-				{
-					for (size_type i = 0; i < this->_size; i++)
-						this->_allocator.destroy(this->_array + i);
-					this->_allocator.deallocate(this->_array, this->_capacity);
-				}
-				this->_allocator = x.get_allocator();
-				this->_size = x.size();
-				if (this->_capacity < x.size())
-					this->_capacity = x.capacity();
-				this->_array = this->_allocator.allocate(this->_capacity);
-				if (x.size() > 0)
-				{
-					for (size_type i = 0; i < x.size(); i++)
-						this->_allocator.construct(this->_array + i, x.at(i));
-				}*/
 				return *this;
 			}
 
