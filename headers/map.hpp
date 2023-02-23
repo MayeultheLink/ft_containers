@@ -19,13 +19,13 @@ namespace ft {
 			typedef typename ft::pair<const key_type, mapped_type>				value_type;
 			typedef Compare									key_compare;
 			typedef s_node<value_type>							node;
+			typedef typename Alloc::reference						reference;
+			typedef typename Alloc::const_reference						const_reference;
+			typedef typename Alloc::pointer							pointer;
+			typedef typename Alloc::const_pointer						const_pointer;
 			typedef typename Alloc::template rebind<node>::other				allocator_type;
-			typedef typename allocator_type::reference					reference;
-			typedef typename allocator_type::const_reference				const_reference;
-			typedef typename allocator_type::pointer					pointer;
-			typedef typename allocator_type::const_pointer					const_pointer;
-			typedef typename ft::bst_iterator<node, value_type>				iterator;
-			typedef typename ft::const_bst_iterator<node, value_type, iterator>		const_iterator;
+			typedef typename ft::bst_iterator<value_type>					iterator;
+			typedef typename ft::const_bst_iterator<value_type>				const_iterator;
 			typedef typename ft::reverse_iterator<iterator>					reverse_iterator;
 			typedef typename ft::reverse_iterator<const_iterator>				const_reverse_iterator;
 			typedef typename ft::iterator_traits<iterator>::difference_type			difference_type;
@@ -89,67 +89,9 @@ namespace ft {
 
 			~map( void ) {
 	
-				if (this->_tree == this->_end)
-				{
-					this->_alloc.deallocate(this->_tree, 1);
-					return ;
-				}
-
-				node*	tmp;
-	
-				while (this->_tree->left)
-				{
-					tmp = this->_tree;
-					while (tmp->left || tmp->right)
-					{
-						while (tmp->left)
-							tmp = tmp->left;
-						if (tmp->right)
-							tmp = tmp->right;
-					}
-					if (tmp == tmp->parent->left)
-					{
-						tmp = tmp->parent;
-						this->_alloc.destroy(tmp->left);
-						this->_alloc.deallocate(tmp->left, 1);
-						tmp->left = NULL;
-					}
-					else if (tmp == tmp->parent->right)
-					{
-						tmp = tmp->parent;
-						this->_alloc.destroy(tmp->right);
-						this->_alloc.deallocate(tmp->right, 1);
-						tmp->right = NULL;
-					}
-				}
-				while (this->_tree->right)
-				{
-					tmp = this->_tree;
-					while (tmp->left || tmp->right)
-					{
-						while (tmp->right)
-							tmp = tmp->right;
-						if (tmp->left)
-							tmp = tmp->left;
-					}
-					if (tmp == tmp->parent->left)
-					{
-						tmp = tmp->parent;
-						this->_alloc.destroy(tmp->left);
-						this->_alloc.deallocate(tmp->left, 1);
-						tmp->left = NULL;
-					}
-					else if (tmp == tmp->parent->right)
-					{
-						tmp = tmp->parent;
-						this->_alloc.destroy(tmp->right);
-						this->_alloc.deallocate(tmp->right, 1);
-						tmp->right = NULL;
-					}
-				}
-				this->_alloc.destroy(this->_tree);
-				this->_alloc.deallocate(this->_tree, 1);
+				this->clear();
 				this->_alloc.deallocate(this->_end, 1);
+
 			}
 
 	/*-----------------------------------------------------------------------------------------*/
@@ -284,7 +226,6 @@ namespace ft {
 			}
 
 			void _erase( node* &tree, key_type key ) {
-				
 				node* curr = this->find(key).get_node();
 				node* parent = curr->parent;
 
@@ -328,7 +269,7 @@ namespace ft {
 				else
 				{
 					node* child = (curr->left) ? curr->left : curr->right;
-					
+
 					if (curr != tree)
 					{
 						if (curr == parent->left)
@@ -350,7 +291,6 @@ namespace ft {
 					this->_alloc.destroy(curr);
 					this->_alloc.deallocate(curr, 1);
 				}
-
 			}
 
 			node* _first_element( void ) const {
@@ -419,13 +359,13 @@ namespace ft {
 			}
 
 			iterator erase( iterator first, iterator last ) {
-				iterator tmp = first;
-				for (; first != last;)
+				if (first == this->begin() && last == this->end())
 				{
-					tmp++;
-					this->erase(first);
-					first = tmp;
+					this->clear();
+					return this->end();
 				}
+				for (; first != last; )
+					this->erase(first++);
 				return last;
 			}
 
@@ -480,14 +420,14 @@ namespace ft {
 						tmp = tmp->parent;
 						this->_alloc.destroy(tmp->left);
 						this->_alloc.deallocate(tmp->left, 1);
-						tmp->left = NULL;
+						tmp->left = 0;
 					}
 					else if (tmp == tmp->parent->right)
 					{
 						tmp = tmp->parent;
 						this->_alloc.destroy(tmp->right);
 						this->_alloc.deallocate(tmp->right, 1);
-						tmp->right = NULL;
+						tmp->right = 0;
 					}
 				}
 				while (this->_tree->right)
@@ -505,14 +445,14 @@ namespace ft {
 						tmp = tmp->parent;
 						this->_alloc.destroy(tmp->left);
 						this->_alloc.deallocate(tmp->left, 1);
-						tmp->left = NULL;
+						tmp->left = 0;
 					}
 					else if (tmp == tmp->parent->right)
 					{
 						tmp = tmp->parent;
 						this->_alloc.destroy(tmp->right);
 						this->_alloc.deallocate(tmp->right, 1);
-						tmp->right = NULL;
+						tmp->right = 0;
 					}
 				}
 				this->_alloc.destroy(this->_tree);

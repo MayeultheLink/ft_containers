@@ -1,8 +1,6 @@
 #ifndef NODE_HPP
 #define NODE_HPP
 
-#include <iostream>
-
 template< class value_type >
 struct s_node {
 
@@ -12,7 +10,7 @@ struct s_node {
 	value_type	root;
 	bool		is_end;
 
-	s_node( const value_type & val ) : parent(NULL), left(NULL), right(NULL), root(val), is_end(false) {}
+	s_node( const value_type & val ) : parent(0), left(0), right(0), root(val), is_end(false) {}
 
 	s_node*	next( void ) {
 		s_node* tmp = this;

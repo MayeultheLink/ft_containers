@@ -4,8 +4,15 @@
 #include <map>
 
 template <typename T, typename U>
-void print(NAMESPACE::map<T, U> v) {
+void print2(NAMESPACE::map<T, U> v) {
 	std::cout << v.size() << std::endl;
+	for (typename NAMESPACE::map<T, U>::iterator it = v.begin(); it != v.end(); it++)
+		std::cout << it->first << " " << it->second << std::endl;
+}
+
+template <typename T, typename U>
+void print(NAMESPACE::map<T, U> v) {
+	std::cout << v.size();
 	for (typename NAMESPACE::map<T, U>::iterator it = v.begin(); it != v.end(); it++)
 		std::cout << it->first << it->second;
 }
@@ -16,7 +23,7 @@ int main() {
 
 		NAMESPACE::map<int, int> v1;
 		print(v1);
-		for (int i = 0; i < 50; i++)
+		for (int i = 0; i < 63; i++)
 			v1[i] = i;
 
 		NAMESPACE::map<int, int> v2(v1.begin(), v1.end());

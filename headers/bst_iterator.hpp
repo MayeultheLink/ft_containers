@@ -7,19 +7,20 @@
 namespace ft
 {
 
-	template < class T, class U >
+	template < class T >
+	class const_bst_iterator;
+
+	template < class T >
 	class bst_iterator {
 
 		public:
 
-			typedef typename ft::bidirectional_iterator_tag	iterator_category;
-			typedef T					value_type;
-			typedef T*					node;
-			typedef std::ptrdiff_t				difference_type;
-			typedef size_t					size_type;
-			typedef U*					pointer;
-			typedef U&					reference;
-			typedef const pointer				const_pointer;
+			typedef typename ft::bidirectional_iterator_tag		iterator_category;
+			typedef T						value_type;
+			typedef T*						pointer;
+			typedef T&						reference;
+			typedef s_node<T>*					node;
+			typedef typename iterator_traits<node>::difference_type	difference_type;
 
 		private:
 
@@ -36,19 +37,10 @@ namespace ft
 				return this->_node;
 			}
 
-			T cpy_node(void) const {
-				T tmp(this->_node->root);
-				tmp.parent = this->_node->parent;
-				tmp.left = this->_node->left;
-				tmp.right = this->_node->right;
-				tmp.is_end = this->_node->is_end;
-				return tmp;
-			}
-
 			bst_iterator &operator= (const bst_iterator & rhs)
 			{
-				if (this != &rhs)
-					this->_node = rhs._node;
+				if (*this != rhs)
+					this->_node = rhs.get_node();
 				return *this;
 			}
 
@@ -94,6 +86,18 @@ namespace ft
 				return this->_node != rhs._node;
 			}
 
+			template < class U >
+			bool operator== (const const_bst_iterator<U> & rhs) const
+			{
+				return (this->_node == rhs.get_node());
+			}
+
+			template < class U >
+			bool operator!= (const const_bst_iterator<U> &rhs) const
+			{
+				return this->_node != rhs.get_node();
+			}
+
 			reference operator* (void) const
 			{
 				return this->_node->root;
@@ -105,19 +109,17 @@ namespace ft
 			}
 	};
 
-	template <class T, class U, class bst_iterator>
+	template < class T >
 	class const_bst_iterator {
 
 		public:
 
-			typedef typename ft::bidirectional_iterator_tag	iterator_category;
-			typedef T					value_type;
-			typedef T*					node;
-			typedef std::ptrdiff_t				difference_type;
-			typedef size_t					size_type;
-			typedef U*					pointer;
-			typedef U&					reference;
-			typedef const value_type*			const_pointer;
+			typedef typename ft::bidirectional_iterator_tag		iterator_category;
+			typedef T						value_type;
+			typedef const T*					pointer;
+			typedef const T&					reference;
+			typedef s_node<T>*					node;
+			typedef typename iterator_traits<node>::difference_type	difference_type;
 
 		private:
 
@@ -126,8 +128,8 @@ namespace ft
 		public:
 
 			const_bst_iterator(void) : _node(NULL) {}
-			const_bst_iterator(const const_bst_iterator & src) : _node(src.get_node()) {}
-			const_bst_iterator(const bst_iterator & src) : _node(src.get_node()) {}
+			template <class U>
+			const_bst_iterator(const bst_iterator<U> & src) : _node(src.get_node()) {}
 			const_bst_iterator(node n) : _node(n) {}
 			~const_bst_iterator(void) {}
 
@@ -135,19 +137,11 @@ namespace ft
 				return this->_node;
 			}
 
-			node cpy_node(void) const {
-				node tmp(this->_node->root);
-				tmp->parent = this->_node->parent;
-				tmp->left = this->_node->left;
-				tmp->right = this->_node->right;
-				tmp->is_end = this->_node->is_end;
-				return tmp;
-			}
-
-			const_bst_iterator &operator= (const const_bst_iterator & rhs)
+			template <class U>
+			const_bst_iterator &operator= (const bst_iterator<U> & rhs)
 			{
-				if (this != &rhs)
-					this->_node = rhs._node;
+				if (*this != rhs)
+					this->_node = rhs.get_node();
 				return *this;
 			}
 
@@ -191,6 +185,18 @@ namespace ft
 			bool operator!= (const const_bst_iterator &rhs) const
 			{
 				return this->_node != rhs._node;
+			}
+
+			template < class U >
+			bool operator== (const bst_iterator<U> & rhs) const
+			{
+				return (this->_node == rhs.get_node());
+			}
+
+			template < class U >
+			bool operator!= (const bst_iterator<U> &rhs) const
+			{
+				return this->_node != rhs.get_node();
 			}
 
 			reference operator* (void) const
